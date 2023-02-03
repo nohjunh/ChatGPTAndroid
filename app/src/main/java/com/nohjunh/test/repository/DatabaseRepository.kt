@@ -1,8 +1,5 @@
 package com.nohjunh.test.repository
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.nohjunh.test.App
 import com.nohjunh.test.database.ChatDatabase
 import com.nohjunh.test.database.entity.ContentEntity
