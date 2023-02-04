@@ -3,40 +3,73 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:padding="5dp"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/rvItemTV"
+    <ImageView
+        android:id="@+id/GPTImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TEST"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:fontFamily="@font/nanumgothicbold"
-        android:layout_marginLeft="10dp"
+        android:background="@drawable/gpt_img_resize"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <Button
-        android:id="@+id/delBtn"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:text="삭제"
-        android:textSize="12dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-    </Button>
+        app:layout_constraintBottom_toTopOf="@id/chatLayout"/>
     <TextView
-        android:id="@+id/holdingId"
-        android:text="temp"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        tools:ignore="MissingConstraints">
-    </TextView>
+        android:id="@+id/GPTname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ChatGPT1"
+        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintStart_toEndOf="@id/GPTImg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chatLayout"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/chat_corner_layout"
+        app:layout_constraintTop_toBottomOf="@id/GPTImg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/rvItemTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TESTTESTTEST"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:fontFamily="@font/nanumgothicbold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delBtn"/>
+        <ImageButton
+            android:id="@+id/delBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/removebtn_resize"
+            android:layout_marginRight="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+        </ImageButton>
+        <TextView
+            android:id="@+id/holdingId"
+            android:text="temp"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            tools:ignore="MissingConstraints">
+        </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

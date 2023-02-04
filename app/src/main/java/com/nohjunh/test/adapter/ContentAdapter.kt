@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nohjunh.test.R
@@ -19,7 +20,7 @@ class ContentAdapter(val context : Context, private val dataSet : List<ContentEn
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val contentTV : TextView = view.findViewById(R.id.rvItemTV)
-        val delBtn : Button = view.findViewById(R.id.delBtn)
+        val delBtn : ImageButton = view.findViewById(R.id.delBtn)
         val idHolder : TextView = view.findViewById(R.id.holdingId)
     }
 
