@@ -26,8 +26,8 @@ class MainViewModel : ViewModel() {
         _deleteCheck.postValue(false)
     }
 
-    fun insertContent(content : String) = viewModelScope.launch(Dispatchers.IO) {
-        databaseRepository.insertContent(content)
+    fun insertContent(content : String, gptOrUser : Int) = viewModelScope.launch(Dispatchers.IO) {
+        databaseRepository.insertContent(content, gptOrUser)
     }
 
     fun deleteSelectedContent(id : Int) = viewModelScope.launch(Dispatchers.IO) {

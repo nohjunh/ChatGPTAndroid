@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.sendBtn.setOnClickListener {
-            viewModel.insertContent(binding.EDView.text.toString())
+            viewModel.insertContent(binding.EDView.text.toString(), 2) // 1: Gpt, 2: User
             binding.EDView.setText("")
             viewModel.getContentData()
         }

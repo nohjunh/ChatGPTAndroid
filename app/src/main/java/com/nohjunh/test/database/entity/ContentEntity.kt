@@ -11,6 +11,8 @@ data class ContentEntity(
     @ColumnInfo(name = "id")
     var id : Int,
     @ColumnInfo(name = "Content")
-    var content : String
+    var content : String,
+    @ColumnInfo(name = "gptOrUser")
+    var gptOrUser : Int
 
 )

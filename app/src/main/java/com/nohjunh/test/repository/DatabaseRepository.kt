@@ -11,7 +11,7 @@ class DatabaseRepository {
 
     fun getContentData() = database.contentDAO().getContentData()
 
-    fun insertContent(content : String) = database.contentDAO().insertContent(ContentEntity(0, content))
+    fun insertContent(content : String, gptOrUser : Int) = database.contentDAO().insertContent(ContentEntity(0, content, gptOrUser))
 
     fun deleteSelectedContent(id : Int) = database.contentDAO().deleteSelectedContent(id)
 

@@ -7,10 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    2B2B2B
+
     <color name="backgroundColor">#2B2B2B</color>
     <color name="ETContainerColor">#3F3F3F</color>
     <color name="ETVbackgroundColor">#535353</color>
-    <color name="GPTbackgroundColor">#FFFFE8</color>
+    <color name="GPTbackgroundColor">#FFFFFFFF</color>
     <color name="UserbackgroundColor">#FFD384</color>
 </resources>
