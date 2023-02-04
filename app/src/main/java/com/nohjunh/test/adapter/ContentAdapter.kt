@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.nohjunh.test.R
 import com.nohjunh.test.database.entity.ContentEntity
@@ -17,14 +18,14 @@ class ContentAdapter(val context : Context, private val dataSet : List<ContentEn
         private const val User = 2
     }
 
-    interface DelBtnClick {
-        fun onClick(view : View, position: Int)
+    interface DelChatLayoutClick {
+        fun onLongClick(view : View, position: Int)
     }
-    var delBtnClick : DelBtnClick? = null
+    var delChatLayoutClick : DelChatLayoutClick? = null
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val contentTV : TextView = view.findViewById(R.id.rvItemTV)
-        val delBtn : ImageButton = view.findViewById(R.id.delBtn)
+        val delChatLayout : ConstraintLayout = view.findViewById(R.id.chatLayout)
         val idHolder : TextView = view.findViewById(R.id.holdingId)
     }
 
@@ -42,8 +43,9 @@ class ContentAdapter(val context : Context, private val dataSet : List<ContentEn
         holder.contentTV.text = dataSet[position].content
         holder.idHolder.text = dataSet[position].id.toString()
 
-        holder.delBtn.setOnClickListener { view ->
-            delBtnClick?.onClick(view, position)
+        holder.delChatLayout.setOnLongClickListener { view ->
+            delChatLayoutClick?.onLongClick(view, position)
+            return@setOnLongClickListener true
         }
 
     }
