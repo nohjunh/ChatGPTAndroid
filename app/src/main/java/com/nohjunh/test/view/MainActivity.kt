@@ -3,6 +3,7 @@ package com.nohjunh.test.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ScrollView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,11 +46,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.gptInsertCheck.observe(this, Observer {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(200)
-                if (it == true) {
-                    viewModel.getContentData()
-                }
+            if (it == true) {
+                viewModel.getContentData()
             }
         })
 
@@ -68,6 +66,10 @@ class MainActivity : AppCompatActivity() {
         binding.RVContainer.layoutManager = LinearLayoutManager(this)
         // 맨 밑부터 보이게
         binding.RVContainer.scrollToPosition(contentDataList.size-1)
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(100)
+            binding.SVContainer.fullScroll(ScrollView.FOCUS_DOWN);
+        }
         // onClick 구현
         contentAdapter.delBtnClick = object : ContentAdapter.DelBtnClick {
             override fun onClick(view : View, position: Int) {

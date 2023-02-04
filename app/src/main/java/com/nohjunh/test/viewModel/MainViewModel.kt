@@ -52,7 +52,6 @@ class MainViewModel : ViewModel() {
         val tempgson = gson.fromJson(tempjson, GptText::class.java)
         Timber.tag("가공결과").e("${tempgson.text}")
         insertContent(tempgson.text.toString(), 1)
-        _gptInsertCheck.postValue(true)
     }
 
     fun getContentData() = viewModelScope.launch(Dispatchers.IO) {
@@ -63,6 +62,9 @@ class MainViewModel : ViewModel() {
 
     fun insertContent(content : String, gptOrUser : Int) = viewModelScope.launch(Dispatchers.IO) {
         databaseRepository.insertContent(content, gptOrUser)
+        if (gptOrUser == 1) {
+            _gptInsertCheck.postValue(true)
+        }
     }
 
     fun deleteSelectedContent(id : Int) = viewModelScope.launch(Dispatchers.IO) {
