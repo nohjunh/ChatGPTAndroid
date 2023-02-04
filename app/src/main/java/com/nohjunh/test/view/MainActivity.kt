@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private var contentDataList = ArrayList<ContentEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

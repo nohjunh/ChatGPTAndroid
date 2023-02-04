@@ -18,6 +18,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.MainActivity"
+            android:theme="@style/Theme.Test.Splash"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>

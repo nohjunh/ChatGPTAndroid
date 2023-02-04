@@ -14,4 +14,19 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- Splash 처리 -->
+    <style name="Theme.Test.Splash" parent="Theme.SplashScreen.IconBackground">
+        <!-- splash icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_layout</item>
+        <!-- 백그라운드 color -->
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <!-- splash delay -->
+        <item name="windowSplashScreenAnimationDuration">2000</item>
+        <!-- splash icon back color
+        <item name="windowSplashScreenIconBackgroundColor">@color/white</item> -->
+        <!-- splash 종료 후 기본 테마 지정 -->
+        <item name="postSplashScreenTheme">@style/Theme.Test</item>
+    </style>
+
 </resources>
