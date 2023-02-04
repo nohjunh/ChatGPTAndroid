@@ -34,6 +34,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    task wrapper(type: Wrapper) {
+        gradleVersion = '7.0'
+    }
 }
 
 dependencies {
@@ -87,5 +90,5 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
 
-
 }
+tasks.register("prepareKotlinBuildScriptModel"){}
