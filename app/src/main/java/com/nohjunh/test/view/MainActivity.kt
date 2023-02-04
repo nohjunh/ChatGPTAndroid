@@ -2,6 +2,7 @@ package com.nohjunh.test.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.nohjunh.test.adapter.ContentAdapter
 import com.nohjunh.test.database.entity.ContentEntity
 import com.nohjunh.test.databinding.ActivityMainBinding
 import com.nohjunh.test.viewModel.MainViewModel
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +34,12 @@ class MainActivity : AppCompatActivity() {
             setContentListRV()
         })
 
+        viewModel.deleteCheck.observe(this, Observer {
+            if (it == true) {
+                viewModel.getContentData()
+            }
+        })
+
         binding.sendBtn.setOnClickListener {
             viewModel.insertContent(binding.EDView.text.toString())
             binding.EDView.setText("")
@@ -46,6 +54,13 @@ class MainActivity : AppCompatActivity() {
         binding.RVContainer.layoutManager = LinearLayoutManager(this)
         // 맨 밑부터 보이게
         binding.RVContainer.scrollToPosition(contentDataList.size-1)
+        // onClick 구현
+        contentAdapter.delBtnClick = object : ContentAdapter.DelBtnClick {
+            override fun onClick(view : View, position: Int) {
+                Timber.tag("삭제버튼클릭").e("${contentDataList[position].id}")
+                viewModel.deleteSelectedContent(contentDataList[position].id)
+            }
+        }
 
     }
 }

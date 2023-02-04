@@ -17,8 +17,13 @@ class MainViewModel : ViewModel() {
     val contentList : LiveData<List<ContentEntity>>
         get() = _contentList
 
+    private var _deleteCheck = MutableLiveData<Boolean>(false)
+    val deleteCheck : LiveData<Boolean>
+        get() = _deleteCheck
+
     fun getContentData() = viewModelScope.launch(Dispatchers.IO) {
         _contentList.postValue(databaseRepository.getContentData())
+        _deleteCheck.postValue(false)
     }
 
     fun insertContent(content : String) = viewModelScope.launch(Dispatchers.IO) {
@@ -27,6 +32,7 @@ class MainViewModel : ViewModel() {
 
     fun deleteSelectedContent(id : Int) = viewModelScope.launch(Dispatchers.IO) {
         databaseRepository.deleteSelectedContent(id)
+        _deleteCheck.postValue(true)
     }
 
 }
