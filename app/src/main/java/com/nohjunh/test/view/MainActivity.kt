@@ -10,6 +10,10 @@ import com.nohjunh.test.adapter.ContentAdapter
 import com.nohjunh.test.database.entity.ContentEntity
 import com.nohjunh.test.databinding.ActivityMainBinding
 import com.nohjunh.test.viewModel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +44,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.gptInsertCheck.observe(this, Observer {
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(200)
+                if (it == true) {
+                    viewModel.getContentData()
+                }
+            }
+        })
+
         binding.sendBtn.setOnClickListener {
+            viewModel.postResponse(binding.EDView.text.toString())
             viewModel.insertContent(binding.EDView.text.toString(), 2) // 1: Gpt, 2: User
             binding.EDView.setText("")
             viewModel.getContentData()
