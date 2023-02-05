@@ -2,7 +2,9 @@
 Android app using OpenAI's ChatGPT
 
 It is possible to obtain the desired information through conversation or in-depth questions.
+
 Conversation content is managed through a Room Databas.
+
 You can delete the conversation by long-clicking the chatBox. (Based on LongClickEvent)
 
 # Setting
@@ -38,13 +40,15 @@ You can delete the conversation by long-clicking the chatBox. (Based on LongClic
 
 # API
 OpenAI API Documentation
+
 [https://platform.openai.com/docs/api-reference]
 
 Add the key to network/Apis.kt on the project.
+
 Put it in the value of authorization.
 
 
 # Views
-![1gif](https://user-images.githubusercontent.com/75293768/216813346-46de361d-8888-4281-aaf4-ed12c675dc4a.gif)
-![2gif](https://user-images.githubusercontent.com/75293768/216813347-4fcaafe9-5bf0-43b6-a4a5-006768a6d07b.gif)
-![3gif](https://user-images.githubusercontent.com/75293768/216813350-e7ee8fc0-4144-4596-bd62-a335462d49c8.gif)
+![gif1](https://user-images.githubusercontent.com/75293768/216814451-59ac513f-452f-4d3b-9418-21654452a1f0.gif)
+![gif2](https://user-images.githubusercontent.com/75293768/216814452-a29c92bd-a782-42f1-a332-9d530678ae0d.gif)
+![gif3](https://user-images.githubusercontent.com/75293768/216814453-c1ece64d-8f8f-44f2-b11e-5335f258896e.gif)
