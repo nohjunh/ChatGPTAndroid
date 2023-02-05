@@ -1,9 +1,9 @@
 # ChatGPTAndroid
-OpenAI's Android app using ChatGPT
+Android app using OpenAI's ChatGPT
 
 It is possible to obtain the desired information through conversation or in-depth questions.
 Conversation content is managed through a Room Databas.
-You can delete the conversation by long-clicking the chatBox.
+You can delete the conversation by long-clicking the chatBox. (Based on LongClickEvent)
 
 # Setting
 - Android Dolphin l 2021.3.1
@@ -24,14 +24,14 @@ You can delete the conversation by long-clicking the chatBox.
 ├── app 
 │   └── src
 │        └── main.java.com.nohjunh.test
-│                                     ├── adapter
-│                                     ├── database
-│                                     ├── model
-│                                     ├── network
-│                                     ├── repository
-│                                     ├── view
-│                                     ├── viewModel
-│                                     └── App.kt
+│                                    ├── adapter
+│                                    ├── database
+│                                    ├── model
+│                                    ├── network
+│                                    ├── repository
+│                                    ├── view
+│                                    ├── viewModel
+│                                    └── App.kt
 └── gradle/wrapper
 
 ``` 
