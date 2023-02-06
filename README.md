@@ -1,9 +1,8 @@
 # ChatGPTAndroid
-Android app using OpenAI's ChatGPT
-
+Android app using OpenAI's ChatGPT</br>
 It is possible to obtain the desired information through conversation or in-depth questions.
 
-Conversation content is managed through a Room Database.
+Conversation content is managed through a Room Database.</br>
 You can delete the conversation by long-clicking the chatBox. (Based on LongClickEvent)
 
 # Setting
@@ -17,7 +16,7 @@ You can delete the conversation by long-clicking the chatBox. (Based on LongClic
 - Coil
 - Coroutine
 - Retrofit
-- ViewPager2
+
 
 # Main src
 ```bash
@@ -42,9 +41,8 @@ OpenAI API Documentation
 
 [https://platform.openai.com/docs/api-reference]
 
-Add the key to network/Apis.kt on the project.
+Add the key to network/Apis.kt on the project.</br>
 Put it in the value of authorization.
-
 
 # Views
 ![gif1](https://user-images.githubusercontent.com/75293768/216814451-59ac513f-452f-4d3b-9418-21654452a1f0.gif)
