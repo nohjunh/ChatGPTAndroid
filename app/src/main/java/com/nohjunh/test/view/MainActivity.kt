@@ -29,6 +29,7 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
+    private var branch : Int = 1 // # 1 -> First time loading
     private lateinit var binding : ActivityMainBinding
     private val viewModel : MainViewModel by viewModels()
     private var contentDataList = ArrayList<ContentEntity>()
@@ -67,12 +68,13 @@ class MainActivity : AppCompatActivity() {
             for (entity in it) {
                 contentDataList.add(entity)
             }
-            setContentListRV()
+            setContentListRV(branch)
         })
 
         viewModel.deleteCheck.observe(this, Observer {
             if (it == true) {
                 viewModel.getContentData()
+                branch = 1
             }
         })
 
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.getContentData()
                 binding.loading.visibility = View.INVISIBLE
             }
+            branch = 2
         })
 
         binding.sendBtn.setOnClickListener {
@@ -89,12 +92,13 @@ class MainActivity : AppCompatActivity() {
             viewModel.postResponse(binding.EDView.text.toString())
             viewModel.insertContent(binding.EDView.text.toString(), 2) // 1: Gpt, 2: User
             binding.EDView.setText("")
+            branch = 2
             viewModel.getContentData()
         }
 
     }
 
-    private fun setContentListRV() {
+    private fun setContentListRV(branch : Int) {
         val contentAdapter = ContentAdapter(this, contentDataList)
         binding.RVContainer.adapter = contentAdapter
         binding.RVContainer.layoutManager = LinearLayoutManager(this).apply {
@@ -106,6 +110,9 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
             binding.SVContainer.fullScroll(ScrollView.FOCUS_DOWN);
+            if (branch != 1) {
+                binding.EDView.requestFocus()
+            }
         }
         // onClick 구현
         contentAdapter.delChatLayoutClick = object : ContentAdapter.DelChatLayoutClick {
