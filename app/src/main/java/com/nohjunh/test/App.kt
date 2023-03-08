@@ -6,10 +6,10 @@ import timber.log.Timber
 
 class App : Application() {
 
-    // Context -> Global
     init {
         instance = this
     }
+
     companion object {
         private var instance : App? = null
         fun context() : Context {
@@ -20,7 +20,9 @@ class App : Application() {
     // Timber setting
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
 }

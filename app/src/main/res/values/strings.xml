@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">test</string>
-    <string name="msg_input_hint">来聊 5 块钱儿的</string>
+    <string name="app_name">快聊</string>
+    <string name="msg_input_hint">您想说些什么？</string>
     <string name="title_chat">ChatGPT</string>
     <string name="ask_ok">确定</string>
     <string name="ask_cancel">取消</string>
@@ -15,4 +15,5 @@
     <string name="api_key_inserted">API Key 成功设置，重启后使用。</string>
     <string name="chat_error_no_answers">对不起，ChatGPT 无法回答这个问题</string>
     <string name="chat_error_catch">对不起，ChatGPT 遇到问题了，错误信息：</string>
+    <string name="chat_tips">您可以跟我对话，历史、人文、科技、甚至是段子、笑话都可以。</string>
 </resources>

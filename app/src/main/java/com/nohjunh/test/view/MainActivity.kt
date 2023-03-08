@@ -20,13 +20,16 @@ import com.nohjunh.test.adapter.ContentAdapter
 import com.nohjunh.test.database.entity.ContentEntity
 import com.nohjunh.test.databinding.ActivityMainBinding
 import com.nohjunh.test.viewModel.MainViewModel
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private var branch : Int = 1 // # 1 -> First time loading
-    private lateinit var binding : ActivityMainBinding
-    private val viewModel : MainViewModel by viewModels()
+    private var branch: Int = 1 // # 1 -> First time loading
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
     private var contentDataList = ArrayList<ContentEntity>()
+    private val layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
+    private val adapter = ContentAdapter(this, contentDataList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,8 +38,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.RVContainer.layoutManager = layoutManager
+        binding.RVContainer.adapter = adapter
 
-        val imageLoader = this?.let {
+
+        val imageLoader = this.let {
             ImageLoader.Builder(it)
                 .components {
                     if (SDK_INT >= 28) {
@@ -47,21 +53,16 @@ class MainActivity : AppCompatActivity() {
                 }
                 .build()
         }
-        if (imageLoader != null) {
-            Coil.setImageLoader(imageLoader)
-        }
+        Coil.setImageLoader(imageLoader)
         binding.loading.visibility = View.INVISIBLE
 
-        // 로딩 되었을 때 바로 content가 보이도록
-        viewModel.getContentData()
-
-        viewModel.contentList.observe(this, Observer {
+        viewModel.contentList.observe(this) {
+            Timber.d("contentList: ${it.size}")
             contentDataList.clear()
-            for (entity in it) {
-                contentDataList.add(entity)
-            }
-            setContentListRV(branch)
-        })
+            contentDataList.addAll(it)
+            adapter.notifyDataSetChanged()
+            layoutManager.scrollToPosition(contentDataList.size - 1)
+        }
 
         viewModel.deleteCheck.observe(this, Observer {
             if (it == true) {
@@ -87,18 +88,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.showDeleteGuide.observe(this) {
-            if (it == true) {
-                showAsk(getString(R.string.ask_title_notice), getString(R.string.ask_msg_delete_guide), {
-                    viewModel.resetFirstOpen()
-                })
-            }
+//            if (it == true) {
+//                showAsk(getString(R.string.ask_title_notice), getString(R.string.ask_msg_delete_guide), {
+//                    viewModel.resetFirstOpen()
+//                })
+//            }
         }
 
         binding.sendBtn.setOnClickListener {
             binding.loading.visibility = View.VISIBLE
             val msg = binding.EDView.text.toString().trim()
             if (msg.isEmpty()) {
-                viewModel.insertContent("你可以跟我对话，历史、人文、科技、甚至是段子、笑话都可以。", 1) // 1: Gpt, 2: User
+                viewModel.insertContent(getString(R.string.chat_tips), 1) // 1: Gpt, 2: User
                 return@setOnClickListener
             }
             viewModel.postResponse(msg)
@@ -111,19 +112,7 @@ class MainActivity : AppCompatActivity() {
         binding.ivSetting.setOnClickListener {
             showInputDialog()
         }
-    }
-
-    private fun setContentListRV(branch : Int) {
-        val contentAdapter = ContentAdapter(this, contentDataList)
-        binding.RVContainer.adapter = contentAdapter
-        binding.RVContainer.layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
-        contentAdapter.delChatLayoutClick = object : ContentAdapter.DelChatLayoutClick {
-            override fun onLongClick(view: View, position: Int) {
-                showAsk(getString(R.string.ask_title_delete_cov), getString(R.string.ask_msg_delete_cov), {
-                    viewModel.deleteSelectedContent(contentDataList[position].id)
-                })
-            }
-        }
+        viewModel.getContentData()
     }
 
     private fun showInputDialog() {
