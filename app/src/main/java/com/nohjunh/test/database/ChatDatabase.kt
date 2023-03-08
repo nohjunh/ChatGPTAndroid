@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.nohjunh.test.database.dao.ContentDAO
 import com.nohjunh.test.database.entity.ContentEntity
 
-@Database(entities = [ContentEntity::class], version = 2)
+@Database(entities = [ContentEntity::class], version = 2, exportSchema = false)
 abstract class ChatDatabase : RoomDatabase() {
 
     abstract fun contentDAO() : ContentDAO
