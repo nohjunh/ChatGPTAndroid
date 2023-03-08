@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">test</string>
+    <string name="msg_input_hint">来聊 5 块钱儿的</string>
+    <string name="title_chat">ChatGPT</string>
+    <string name="ask_ok">确定</string>
+    <string name="ask_cancel">取消</string>
+    <string name="ask_title_delete_cov">删除对话</string>
+    <string name="ask_msg_delete_cov">一旦删除的对话将无法恢复。</string>
+    <string name="ask_title_notice">提示</string>
+    <string name="ask_msg_delete_guide">长按对话内容可删除</string>
+    <string name="hint_api_key">API Key</string>
+    <string name="ask_title_setting">设置</string>
+    <string name="ask_msg_setting">请输入您的 API Key</string>
+    <string name="api_key_empty_error">API Key 必须要设置才能使用，请点击右上角设置按钮进行设置。</string>
+    <string name="api_key_inserted">API Key 成功设置，重启后使用。</string>
+    <string name="chat_error_no_answers">对不起，ChatGPT 无法回答这个问题</string>
+    <string name="chat_error_catch">对不起，ChatGPT 遇到问题了，错误信息：</string>
 </resources>

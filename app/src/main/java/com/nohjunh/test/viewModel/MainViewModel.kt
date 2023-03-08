@@ -1,24 +1,27 @@
 package com.nohjunh.test.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.nohjunh.test.R
 import com.nohjunh.test.database.entity.ContentEntity
-import com.nohjunh.test.model.GptText
 import com.nohjunh.test.repository.DatabaseRepository
 import com.nohjunh.test.repository.NetWorkRepository
+import com.nohjunh.test.repository.SpRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val databaseRepository = DatabaseRepository()
     private val netWorkRepository = NetWorkRepository()
+    private val spRepository = SpRepository(application)
 
     private var _contentList = MutableLiveData<List<ContentEntity>>()
     val contentList : LiveData<List<ContentEntity>>
@@ -32,26 +35,51 @@ class MainViewModel : ViewModel() {
     val gptInsertCheck : LiveData<Boolean>
         get() = _gptInsertCheck
 
-    fun postResponse(query : String) = viewModelScope.launch {
-        val jsonObject: JsonObject? = JsonObject().apply{
-            // params
-            addProperty("model", "text-davinci-003")
-            addProperty("prompt", query)
-            addProperty("temperature", 0)
-            addProperty("max_tokens", 500)
-            addProperty("top_p", 1)
-            addProperty("frequency_penalty", 0.0)
-            addProperty("presence_penalty", 0.0)
+    private var _showLoading = MutableLiveData(false)
+    val showLoading : LiveData<Boolean>
+        get() = _showLoading
+
+    private var _showDeleteGuide = MutableLiveData(false)
+    val showDeleteGuide : LiveData<Boolean>
+        get() = _showDeleteGuide
+
+    private val gson by lazy { Gson() }
+
+    init {
+        _showDeleteGuide.postValue(spRepository.isFirstOpen())
+        val token = spRepository.getToken()
+        if (token.isNotEmpty()) {
+            netWorkRepository.setToken(token)
+        } else {
+            insertContent(application.getString(R.string.api_key_empty_error), 1)
         }
-        val response = netWorkRepository.postResponse(jsonObject!!)
-        Timber.tag("응답결과").e("${response.choices.get(0)}")
-        // json -> object 는 fromJson
-        // object -> json 은 toJson
-        val gson = Gson()
-        val tempjson = gson.toJson(response.choices.get(0))
-        val tempgson = gson.fromJson(tempjson, GptText::class.java)
-        Timber.tag("가공결과").e("${tempgson.text}")
-        insertContent(tempgson.text.toString(), 1)
+    }
+
+    fun postResponse(query : String) = viewModelScope.launch {
+        val jsonObj = mutableMapOf<String, Any>()
+
+        jsonObj["model"] = "gpt-3.5-turbo-0301"
+        jsonObj["messages"] = listOf(mapOf("role" to "user", "content" to query))
+        jsonObj["temperature"] = 1
+        jsonObj["max_tokens"] = 1000
+        jsonObj["top_p"] = 1
+
+        _showLoading.postValue(true)
+        val message = try {
+            val body = gson.toJson(jsonObj).toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+
+            val response = netWorkRepository.postResponse(body)
+            if (response.choices.isEmpty()) {
+                getApplication<Application>().getString(R.string.chat_error_no_answers)
+            } else {
+                response.choices.first().message.content
+            }
+        } catch (e : Exception) {
+            Timber.e(e)
+            getApplication<Application>().getString(R.string.chat_error_catch) + e.message
+        }
+        _showLoading.postValue(false)
+        insertContent(message, 1)
     }
 
     fun getContentData() = viewModelScope.launch(Dispatchers.IO) {
@@ -70,6 +98,15 @@ class MainViewModel : ViewModel() {
     fun deleteSelectedContent(id : Int) = viewModelScope.launch(Dispatchers.IO) {
         databaseRepository.deleteSelectedContent(id)
         _deleteCheck.postValue(true)
+    }
+
+    fun resetFirstOpen() {
+        spRepository.setFirstOpen(false)
+        _showDeleteGuide.postValue(false)
+    }
+
+    fun setupApiKey(text: String) {
+        spRepository.setToken(text)
     }
 
 }

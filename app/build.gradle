@@ -80,6 +80,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
 
+    // okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
