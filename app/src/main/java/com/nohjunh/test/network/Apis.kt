@@ -6,7 +6,8 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface Apis {
-    @POST("v1/chat/completions")
+
+    @POST(RetrofitInstance.CHAT_URL_PATH)
     suspend fun postRequest(@Body json: RequestBody): GptR
 
 }

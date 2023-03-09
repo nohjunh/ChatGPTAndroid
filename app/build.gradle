@@ -103,6 +103,8 @@ dependencies {
     // okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    // okhttp sse
+    implementation 'com.squareup.okhttp3:okhttp-sse:4.9.3'
 
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -113,6 +115,9 @@ dependencies {
     // Sub
     implementation 'androidx.activity:activity-ktx:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
+
+    // eventbus
+    implementation 'org.greenrobot:eventbus:3.2.0'
 
 }
 tasks.register("prepareKotlinBuildScriptModel"){}

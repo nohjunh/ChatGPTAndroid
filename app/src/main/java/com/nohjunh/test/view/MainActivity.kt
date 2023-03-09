@@ -15,11 +15,16 @@ import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import com.google.android.material.textfield.TextInputLayout
+import com.nohjunh.test.BuildConfig
 import com.nohjunh.test.R
 import com.nohjunh.test.adapter.ContentAdapter
 import com.nohjunh.test.database.entity.ContentEntity
 import com.nohjunh.test.databinding.ActivityMainBinding
+import com.nohjunh.test.model.event.SteamDataEvent
 import com.nohjunh.test.viewModel.MainViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -27,9 +32,9 @@ class MainActivity : AppCompatActivity() {
     private var branch: Int = 1 // # 1 -> First time loading
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    private var contentDataList = ArrayList<ContentEntity>()
+
     private val layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
-    private val adapter = ContentAdapter(this, contentDataList)
+    private val adapter = ContentAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -58,10 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.contentList.observe(this) {
             Timber.d("contentList: ${it.size}")
-            contentDataList.clear()
-            contentDataList.addAll(it)
-            adapter.notifyDataSetChanged()
-            layoutManager.scrollToPosition(contentDataList.size - 1)
+            adapter.submitList(it)
+            layoutManager.scrollToPosition(adapter.itemCount - 1)
         }
 
         viewModel.deleteCheck.observe(this, Observer {
@@ -94,25 +97,43 @@ class MainActivity : AppCompatActivity() {
 //                })
 //            }
         }
+        viewModel.chatGptNewMsg.observe(this) {
+            if (it != null) {
+                adapter.addMsg(it)
+                layoutManager.scrollToPosition(adapter.itemCount - 1)
+            }
+        }
 
         binding.sendBtn.setOnClickListener {
             binding.loading.visibility = View.VISIBLE
             val msg = binding.EDView.text.toString().trim()
             if (msg.isEmpty()) {
-                viewModel.insertContent(getString(R.string.chat_tips), 1) // 1: Gpt, 2: User
+                viewModel.insertContent(getString(R.string.chat_tips), ContentEntity.Gpt, ContentEntity.TYPE_SYSTEM) // 1: Gpt, 2: User
                 return@setOnClickListener
             }
-            viewModel.postResponse(msg)
-            viewModel.insertContent(msg, 2) // 1: Gpt, 2: User
-            binding.EDView.setText("")
+            if (!BuildConfig.DEBUG) {
+                binding.EDView.setText("")
+            }
             branch = 2
-            viewModel.getContentData()
+            viewModel.insertContent(msg, ContentEntity.User, ContentEntity.TYPE_CONVERSATION, false) // 1: Gpt, 2: User
+            adapter.addMsg(ContentEntity(0, msg, ContentEntity.User))
+
+            if (viewModel.sendBySteam) {
+                adapter.addChatGpt("waiting for response...")
+            }
+            layoutManager.scrollToPosition(adapter.itemCount - 1)
+            viewModel.postResponse(msg)
         }
 
         binding.ivSetting.setOnClickListener {
             showInputDialog()
         }
         viewModel.getContentData()
+        if (BuildConfig.DEBUG) {
+            binding.EDView.setText("介绍一下你自己")
+        }
+
+        EventBus.getDefault().register(this)
     }
 
     private fun showInputDialog() {
@@ -130,8 +151,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.api_key_empty_error), Toast.LENGTH_SHORT).show()
                 return@setPositiveButton
             }
-            viewModel.insertContent(getString(R.string.api_key_inserted), 1)
             viewModel.setupApiKey(text)
+            viewModel.insertContent(getString(R.string.api_key_inserted), ContentEntity.Gpt, ContentEntity.TYPE_SYSTEM)
         }
         builder.setNegativeButton(getString(R.string.ask_cancel)) { dialog, which ->
             dialog.dismiss()
@@ -151,5 +172,23 @@ class MainActivity : AppCompatActivity() {
                 negativeAction?.invoke()
             }
         builder.show()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun receiveSteamData(data: SteamDataEvent) {
+        Timber.d("receiveSteamData: ${data.data} type ${data.type}")
+        if (data.isSteam()) {
+            adapter.appendLast(data.data)
+            layoutManager.scrollToPosition(adapter.itemCount - 1)
+        } else if (data.isSteamStart()) {
+//            adapter.addLast("waiting for response...")
+        } else if (data.isSteamEnd()) {
+            viewModel.insertContent(adapter.getLastContent(), ContentEntity.Gpt, ContentEntity.TYPE_CONVERSATION, false)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 }

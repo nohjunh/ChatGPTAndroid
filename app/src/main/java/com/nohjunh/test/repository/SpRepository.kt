@@ -29,4 +29,12 @@ class SpRepository(context: Context) {
   fun setToken(token: String) {
     sp.edit().putString("token", token).apply()
   }
+
+  fun getSendBySteam(): Boolean {
+    return sp.getBoolean("sendBySteam", true)
+  }
+
+  fun setSendBySteam(sendBySteam: Boolean) {
+    sp.edit().putBoolean("sendBySteam", sendBySteam).apply()
+  }
 }

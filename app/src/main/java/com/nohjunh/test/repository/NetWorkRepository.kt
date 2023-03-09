@@ -13,4 +13,9 @@ class NetWorkRepository {
     fun setToken(token: String) {
         RetrofitInstance.token = token
     }
+
+    fun sendSteamRequest(body: RequestBody) {
+        val request = RetrofitInstance.getSteamRequest().post(body).build()
+        RetrofitInstance.sendRequestSteam(request)
+    }
 }

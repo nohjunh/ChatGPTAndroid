@@ -11,7 +11,14 @@ class DatabaseRepository {
 
     fun getContentData() = database.contentDAO().getContentData()
 
-    fun insertContent(content : String, gptOrUser : Int) = database.contentDAO().insertContent(ContentEntity(0, content, gptOrUser))
+    fun insertContent(content: String, gptOrUser: Int, msgType: Int): ContentEntity {
+        val bean = ContentEntity(0, content, gptOrUser).apply {
+            type = msgType
+            time = System.currentTimeMillis()
+        }
+        database.contentDAO().insertContent(bean)
+        return bean
+    }
 
     fun deleteSelectedContent(id : Int) = database.contentDAO().deleteSelectedContent(id)
 
