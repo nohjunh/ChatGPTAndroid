@@ -16,4 +16,19 @@
     <string name="chat_error_no_answers">对不起，ChatGPT 无法回答这个问题</string>
     <string name="chat_error_catch">对不起，ChatGPT 遇到问题了，错误信息：</string>
     <string name="chat_tips">您可以跟我对话，历史、人文、科技、甚至是段子、笑话都可以。</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

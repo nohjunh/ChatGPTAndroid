@@ -21,6 +21,7 @@ import com.nohjunh.test.adapter.ContentAdapter
 import com.nohjunh.test.database.entity.ContentEntity
 import com.nohjunh.test.databinding.ActivityMainBinding
 import com.nohjunh.test.model.event.SteamDataEvent
+import com.nohjunh.test.view.settings.SettingsActivity
 import com.nohjunh.test.viewModel.MainViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.RVContainer.layoutManager = layoutManager
         binding.RVContainer.adapter = adapter
-
+        viewModel.checkToken()
 
         val imageLoader = this.let {
             ImageLoader.Builder(it)
@@ -126,7 +127,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.ivSetting.setOnClickListener {
-            showInputDialog()
+//            showInputDialog()
+            SettingsActivity.start(this)
         }
         viewModel.getContentData()
         if (BuildConfig.DEBUG) {

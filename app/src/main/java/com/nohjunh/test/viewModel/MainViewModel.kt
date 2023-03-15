@@ -1,11 +1,13 @@
 package com.nohjunh.test.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.nohjunh.test.App
 import com.nohjunh.test.BuildConfig
 import com.nohjunh.test.R
 import com.nohjunh.test.database.entity.ContentEntity
@@ -56,15 +58,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val gson by lazy { Gson() }
     var sendBySteam = false
 
+    companion object {
+        private const val TAG = "MainViewModel"
+    }
+
     init {
         _showDeleteGuide.postValue(spRepository.isFirstOpen())
+        sendBySteam = spRepository.getSendBySteam()
+    }
+
+    fun checkToken() {
         val token = spRepository.getToken()
         if (token.isNotEmpty()) {
             netWorkRepository.setToken(token)
         } else {
-            _chatGptNewMsg.value = databaseRepository.insertContent(application.getString(R.string.api_key_empty_error), ContentEntity.Gpt, ContentEntity.TYPE_SYSTEM)
+            viewModelScope.launch {
+                Log.d(TAG, "checkToken: thread: ${Thread.currentThread().name}")
+                withContext(Dispatchers.IO) {
+                    _chatGptNewMsg.postValue(databaseRepository.insertContent(getApplication<Application>().getString(R.string.api_key_empty_error), ContentEntity.Gpt, ContentEntity.TYPE_SYSTEM))
+                }
+            }
         }
-        sendBySteam = spRepository.getSendBySteam()
     }
 
     fun postResponse(query: String) = viewModelScope.launch {
