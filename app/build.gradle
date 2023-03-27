@@ -18,10 +18,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // configure signing
+    signingConfigs {
+        release {
+            storeFile file('key.jks')
+            storePassword 'password'
+            keyAlias 'key'
+            keyPassword 'password'
+        }
+    }
+
+    signingConfigs {
+        myConfig {
+            keyAlias 'key0'
+            keyPassword 'chatgpt'
+            storeFile file('key')
+            storePassword 'chatgpt'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
         }
     }
     compileOptions {
@@ -45,6 +65,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -80,6 +101,12 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
 
+    // okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    // okhttp sse
+    implementation 'com.squareup.okhttp3:okhttp-sse:4.9.3'
+
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
@@ -89,6 +116,9 @@ dependencies {
     // Sub
     implementation 'androidx.activity:activity-ktx:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
+
+    // eventbus
+    implementation 'org.greenrobot:eventbus:3.2.0'
 
 }
 tasks.register("prepareKotlinBuildScriptModel"){}

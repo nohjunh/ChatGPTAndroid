@@ -1,25 +1,27 @@
 package com.nohjunh.test.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.nohjunh.test.R
 import com.nohjunh.test.database.entity.ContentEntity
+import timber.log.Timber
 
-class ContentAdapter(val context : Context, private val dataSet : List<ContentEntity>) : RecyclerView.Adapter<ContentAdapter.ViewHolder>() {
+class ContentAdapter : RecyclerView.Adapter<ContentAdapter.ViewHolder>() {
+
+    private val dataSet: MutableList<ContentEntity> = mutableListOf()
 
     companion object {
-        private const val Gpt = 1
-        private const val User = 2
+        const val Gpt = 1
+        const val User = 2
+        private const val STEAM_PAYLOAD = "steam_payload"
     }
 
     interface DelChatLayoutClick {
-        fun onLongClick(view : View, position: Int)
+        fun onLongClick(view: View, position: Int)
     }
     var delChatLayoutClick : DelChatLayoutClick? = null
 
@@ -47,7 +49,16 @@ class ContentAdapter(val context : Context, private val dataSet : List<ContentEn
             delChatLayoutClick?.onLongClick(view, position)
             return@setOnLongClickListener true
         }
+    }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            if (payloads[0].toString() == STEAM_PAYLOAD) {
+                holder.contentTV.text = dataSet[position].content
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -61,5 +72,37 @@ class ContentAdapter(val context : Context, private val dataSet : List<ContentEn
             User
         }
     }
+
+    private val steamBuilder = StringBuilder()
+
+    fun addChatGpt(data: String) {
+        Timber.d("addLast: $data")
+        steamBuilder.clear()
+        dataSet.add(ContentEntity(0, data, Gpt))
+        notifyItemInserted(dataSet.size - 1)
+    }
+
+    fun appendLast(data: String) {
+        steamBuilder.append(data)
+        val last = dataSet.size - 1
+        dataSet[last].content = steamBuilder.toString()
+        notifyItemChanged(last, STEAM_PAYLOAD)
+    }
+
+    fun addMsg(msg: ContentEntity) {
+        dataSet.add(msg)
+        notifyItemInserted(dataSet.size - 1)
+    }
+
+    fun submitList(it: List<ContentEntity>) {
+        dataSet.clear()
+        dataSet.addAll(it)
+        notifyDataSetChanged()
+    }
+
+    fun getLastContent(): String {
+        return steamBuilder.toString()
+    }
+
 
 }

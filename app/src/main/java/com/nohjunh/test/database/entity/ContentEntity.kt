@@ -15,4 +15,17 @@ data class ContentEntity(
     @ColumnInfo(name = "gptOrUser")
     var gptOrUser : Int
 
-)
+) {
+    @ColumnInfo(name = "type")
+    var type: Int = 0
+    @ColumnInfo(name = "time")
+    var time: Long = 0
+
+    companion object {
+        const val Gpt = 1
+        const val User = 2
+
+        const val TYPE_CONVERSATION = 0
+        const val TYPE_SYSTEM = 1
+    }
+}

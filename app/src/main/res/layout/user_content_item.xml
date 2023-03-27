@@ -23,19 +23,20 @@
             android:id="@+id/rvItemTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TESTTESTTEST"
+            android:textIsSelectable="true"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:fontFamily="@font/nanumgothicbold"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             app:layout_constraintStart_toStartOf="parent"
+            tools:text="User Input Message"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
         <TextView
             android:id="@+id/holdingId"
-            android:text="temp"
+            tools:text="temp"
             android:layout_height="0dp"
             android:layout_width="0dp"
             tools:ignore="MissingConstraints">

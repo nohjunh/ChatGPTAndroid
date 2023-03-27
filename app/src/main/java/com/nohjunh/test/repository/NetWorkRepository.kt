@@ -1,13 +1,21 @@
 package com.nohjunh.test.repository
 
-import com.google.gson.JsonObject
 import com.nohjunh.test.network.Apis
 import com.nohjunh.test.network.RetrofitInstance
-import org.json.JSONObject
+import okhttp3.RequestBody
 
 class NetWorkRepository {
 
-    private val chatGPTClient = RetrofitInstance.getInstance().create(Apis::class.java)
+    private val chatGPTClient by lazy { RetrofitInstance.getInstance().create(Apis::class.java) }
 
-    suspend fun postResponse(jsonData : JsonObject) = chatGPTClient.postRequest(jsonData)
+    suspend fun postResponse(jsonData: RequestBody) = chatGPTClient.postRequest(jsonData)
+
+    fun setToken(token: String) {
+        RetrofitInstance.token = token
+    }
+
+    fun sendSteamRequest(body: RequestBody) {
+        val request = RetrofitInstance.getSteamRequest().post(body).build()
+        RetrofitInstance.sendRequestSteam(request)
+    }
 }
